@@ -1,7 +1,7 @@
 import { EntitySchema } from "typeorm";
-import IUser from "../Poco/IUser";
+import IUser from "../Pojo/IUser";
 
-export const CategoryEntity = new EntitySchema<IUser>({
+export default new EntitySchema<IUser>({
   name: "user",
   columns: {
       id: {

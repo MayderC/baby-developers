@@ -1,24 +1,27 @@
-import express from 'express'
+const cors = require('cors')
+const express =  require('express')
 import ISetup from '../ISetup';
 import dataSource from '../Database/DataSource'
-import cors from 'cors'
 import userRoutes from '../WebServer/Routes/user.routes';
-import UserController from './Controllers/UserController';
-import UserService from './../Application/Services/Adapters/UserServices';
-import MemoryRepository from './../Application/Repositories/Adapters/MemoryRepository';
-import IUserRepository from './../Application/Repositories/Ports/IUserRepository';
+import authRoutes from '../WebServer/Routes/auth.routes'
+import DependencyContainer from '../container/DependencyContainer';
+
 
 export default class Server implements ISetup{
 
+  private _dependencyContainer: DependencyContainer;
   private app  = express(); 
   PORT = process.env.PORT || 3000;
   PATH : string = '/api/';
 
+  private _usercotroller = 'UserController'
+
   constructor(){
+    this._dependencyContainer = new DependencyContainer()
     this.middlewares()
-    this.routes()
     this.databaseConexion()
   }
+  
   databaseConexion(){
     dataSource.initialize()
       .then(() => console.log("sql server online"))
@@ -27,14 +30,16 @@ export default class Server implements ISetup{
 
   middlewares(){
     this.app.use(cors())
+    this.app.use(express.json())
   }
   routes(){
-    
-    this.app.use(this.PATH + 'user', userRoutes(new UserController()))
+    this.app.use(this.PATH + 'auth', authRoutes(this._dependencyContainer.getContainer.resolve(this._usercotroller)))
+    this.app.use(this.PATH + 'user', userRoutes(this._dependencyContainer.getContainer.resolve(this._usercotroller)))
   }
 
   start(){
-    this.app.listen(this.PORT, () => 
-    console.log(`Listen on port: ${this.PORT}`))
+    this.app.listen(this.PORT, () =>{
+    this.routes()
+    console.log(`Listen on port: ${this.PORT}`)})
   }
 }
