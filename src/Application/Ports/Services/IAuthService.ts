@@ -1,4 +1,4 @@
-import IUser from './../../Entities/Pojo/IUser';
+import IUser from '../../Entities/Pojo/IUser';
 
 
 export default interface IAuthService {

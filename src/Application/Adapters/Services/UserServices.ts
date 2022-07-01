@@ -1,6 +1,6 @@
 import IUser from "../../Entities/Pojo/IUser";
-import IUserService from "../Ports/IUserService";
-import IUserRepository from '../../Repositories/Ports/IRepository';
+import IUserService from "../../Ports/Services/IUserService";
+import IUserRepository from "../../Ports/Repositories/IUserRepository";
 
 export default class UserService implements IUserService{
   
@@ -19,10 +19,10 @@ export default class UserService implements IUserService{
     return user;
   }
 
-  // getByUsername(): Promise<IUser>{
-  //   const user: IUser = await this._userRespository.
-  //   return user
-  // }
+  async getByUsername(): Promise<IUser>{
+    const user: IUser = await this._userRespository.getByUsername("")
+    return user
+  }
 
   delete(id: string): boolean {
     throw new Error("Method not implemented.");

@@ -1,9 +1,9 @@
 import {asClass, createContainer, InjectionMode} from 'awilix'
-import AuthController from './../WebServer/Controllers/AuthController';
-import UserController from './../WebServer/Controllers/UserController';
-import UserService from './../Application/Services/Adapters/UserServices';
-import AuthService from '../Application/Services/Adapters/AuthService';
-import UserRepository from './../Application/Repositories/Adapters/UserRepository';
+import AuthController from '../Infrastructure/WebServer/Controllers/AuthController';
+import UserController from '../Infrastructure/WebServer/Controllers/UserController';
+import UserService from '../Application/Adapters/Services/UserServices';
+import AuthService from '../Application/Adapters/Services/AuthService';
+import UserRepository from '../Application/Adapters/Repositories/UserRepository';
 
 
 export default class DependencyContainer {
@@ -36,8 +36,8 @@ export default class DependencyContainer {
   registerServices(){
     this._container.register({
 
-      UserService : asClass(UserService).scoped(),
-      AuthService : asClass(AuthService).scoped()
+      userService : asClass(UserService).scoped(),
+      authService : asClass(AuthService).scoped()
 
     })   
   }
@@ -45,7 +45,7 @@ export default class DependencyContainer {
   registerRepositories(){
     this._container.register({
 
-      UserRepository : asClass(UserRepository).scoped()
+      userRepository : asClass(UserRepository).scoped()
 
     })
   }

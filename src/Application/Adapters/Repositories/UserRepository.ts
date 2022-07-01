@@ -1,11 +1,11 @@
-import IRepository from './../Ports/IRepository';
-import IUser from './../../Entities/Pojo/IUser';
-import IRepositoryGetByUsername from './../Ports/IRepositoryGetByUsername';
-import AppDataSource from '../../../Database/DataSource'
-import User  from '../../Entities/Models/User'
+import IUser from '../../Entities/Pojo/IUser';
+import AppDataSource from '../../../Infrastructure/Database/DataSource'
+import User from '../../Entities/Models/User';
 import { FindOptionsWhere } from 'typeorm';
+import IUserRepository from '../../Ports/Repositories/IUserRepository';
 
-export default class UserRepository implements IRepository<IUser>, IRepositoryGetByUsername<IUser> {
+
+export default class UserRepository implements IUserRepository<IUser> {
 
  async get(options: FindOptionsWhere<IUser>): Promise<IUser | null> {
 
@@ -35,6 +35,7 @@ export default class UserRepository implements IRepository<IUser>, IRepositoryGe
   }
 
   async save(user: IUser): Promise<IUser> {
+
 
     return await AppDataSource.manager.create(User, user)
   }

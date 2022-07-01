@@ -1,6 +1,6 @@
-import IAuthService from "../Ports/IAuthService";
-import IUser from './../../Entities/Pojo/IUser';
-import IRepository from "../../Repositories/Ports/IRepository";
+import IAuthService from '../../Ports/Services/IAuthService';
+import IUser from '../../Entities/Pojo/IUser';
+import IRepository from '../../Ports/Repositories/IRepository';
 import {genSaltSync, hashSync, compareSync} from 'bcrypt'
 
 

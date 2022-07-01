@@ -1,10 +1,10 @@
 const cors = require('cors')
 const express =  require('express')
-import ISetup from '../ISetup';
+import ISetup from '../../ISetup';
 import dataSource from '../Database/DataSource'
-import userRoutes from '../WebServer/Routes/user.routes';
-import authRoutes from '../WebServer/Routes/auth.routes'
-import DependencyContainer from '../container/DependencyContainer';
+import userRoutes from './Routes/user.routes';
+import authRoutes from './Routes/auth.routes'
+import DependencyContainer from '../../container/DependencyContainer';
 
 
 export default class Server implements ISetup{
@@ -15,16 +15,17 @@ export default class Server implements ISetup{
   PATH : string = '/api/';
 
   private _usercotroller = 'UserController'
+  private _authController = "AuthController"
 
   constructor(){
     this._dependencyContainer = new DependencyContainer()
     this.middlewares()
     this.databaseConexion()
   }
-  
+
   databaseConexion(){
     dataSource.initialize()
-      .then(() => console.log("sql server online"))
+      .then(() => console.log("conected to db"))
       .catch(err => console.log(err))
   }
 
@@ -33,7 +34,7 @@ export default class Server implements ISetup{
     this.app.use(express.json())
   }
   routes(){
-    this.app.use(this.PATH + 'auth', authRoutes(this._dependencyContainer.getContainer.resolve(this._usercotroller)))
+    this.app.use(this.PATH + 'auth', authRoutes(this._dependencyContainer.getContainer.resolve(this._authController)))
     this.app.use(this.PATH + 'user', userRoutes(this._dependencyContainer.getContainer.resolve(this._usercotroller)))
   }
 
