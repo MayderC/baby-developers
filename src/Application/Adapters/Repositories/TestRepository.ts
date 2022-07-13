@@ -14,7 +14,6 @@ export default class TestRepository implements IUserRepository<IUser>{
     return Promise.resolve({email: "email@example.com", id:"id", password: "hash", username: "username"})
   }
   getAll(): Promise<IUser[]> {
-    
     return Promise.resolve([
       {email: "email@example.com", id:"id", password: "hash", username: "username"},
       {email: "email@example.com", id:"id", password: "hash", username: "username"},
@@ -34,7 +33,7 @@ export default class TestRepository implements IUserRepository<IUser>{
 
   }
   save(user: IUser): Promise<IUser> {
-    return Promise.resolve({email: "email@example.com", id:"id", password: "hash", username: "username"})
+    return Promise.resolve(user)
   }
   get(options: unknown): Promise<IUser> {
     return Promise.resolve({email: "email@example.com", id:"id", password: "hash", username: "username"})

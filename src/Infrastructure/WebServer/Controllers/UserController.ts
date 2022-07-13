@@ -1,11 +1,8 @@
 import {Request, Response} from 'express'
 import IUser from '../../../Application/Entities/Pojo/IUser';
-import UserService from '../../../Application/Adapters/Services/UserServices';
 import IUserService from '../../../Application/Ports/Services/IUserService';
-import UserRepository from '../../../Application/Adapters/Repositories/UserRepository';
+import {BAD,OK, DELETED, UPDATED, ERROR, SAVED, sendMsg} from '../http-status'
 
-
-const _userService : IUserService = new UserService(new UserRepository())
 
 export default class UserController {
   
@@ -16,26 +13,61 @@ export default class UserController {
 
   async getAll(req: Request, res : Response) : Promise<Response<Array<IUser>>> {
     try {
-
       const users : Array<IUser>  = await this._userService.getAll()
-      return res.status(200).json(users);
-    
+      return res.status(OK).json(users);
     } catch (error) {
       console.log(error);
-      return res.status(400);
+      return res.status(BAD);
     }
   }
 
   async getById(req: Request, res: Response): Promise<Response<IUser>> {
     try {
-      
+
       const user : IUser | null= await this._userService.getById(req.params['id']);
-      return res.status(200).json(user);
+      return res.status(OK).json(user);
 
     } catch (error) {
-      console.log(error);
-      return res.status(400) 
+      return res.status(BAD).send(ERROR)
     }
   }
+
+  async update(req: Request, res: Response): Promise<Response>{
+    try {
+
+      await this._userService.update(req.body.user)
+      return res.status(OK).send(UPDATED)
+
+    } catch (error) {
+      return res.status(BAD).send(ERROR)
+    }
+  }
+
+  async delete(req: Request, res: Response): Promise<Response>{
+    try {
+
+      const isDeleted = await this._userService.delete(req.params['id'])
+      return isDeleted ? res.status(OK).send(DELETED) : res.status(BAD).send(ERROR)
+
+    } catch (error) {
+      return res.status(BAD).send(error)
+    }
+  }
+
+  async save(req: Request, res: Response): Promise<Response> {
+    try {
+
+      const userFound = await this._userService.getByUsernme(req.body.user.username)
+      if(userFound)return res.status(BAD).send(sendMsg("This user is already taken"))
+
+
+      const user = await this._userService.save(req.body.user)
+      return res.status(OK).send(user)
+
+    } catch (error) {
+      return res.status(BAD).send(ERROR)
+    }
+  }
+  
 
 }

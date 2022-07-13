@@ -1,22 +1,29 @@
-import { EntitySchema } from "typeorm";
-import IUser from "../Pojo/IUser";
+import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany, Unique, Index } from "typeorm"
+import IUser from './../Pojo/IUser';
+import {Role} from './Role'
 
-export default new EntitySchema<IUser>({
-  name: "user",
-  columns: {
-      id: {
-          type: String,
-          primary: true,
-          generated: true,
-      },
-      username : {
-        type : String
-      },
-      email : {
-        type: String
-      },
-      password : {
-        type : String
-      }
-  }
-})
+
+@Entity()
+export class User implements IUser {
+
+  @PrimaryGeneratedColumn('uuid')
+  id: string
+
+  @Index({ unique: true })
+  @Column({name: 'username'})
+  username: string;
+
+  @Index({ unique: true })
+  @Column({name: 'email'})
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  isActive: boolean
+
+  @ManyToMany(() => Role)
+  @JoinTable()
+  roles: Role[];
+}

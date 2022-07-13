@@ -1,24 +1,40 @@
-import jwt from 'jsonwebtoken'
-import ITokenPayload from './ITokenPayload';
+import {sign, verify, decode, JwtPayload} from 'jsonwebtoken'
+import {IRfreshTokenPayload, ITokenPayload} from './ITokenPayload';
 
 
+// 60000ms = 1 minunte
 
+export const createToken = (payload: ITokenPayload) : string => {
 
-export default class JsonWebToken {
+  const token = sign(payload, "SECRET", {
+    //expiresIn : 15 * 60000
+    expiresIn : 100
+  })
 
-  createToken(payload: ITokenPayload) : string {
+  return token;
+}
 
-    const token = jwt.sign(payload, "SECRET", {
-      expiresIn : 15 * 60000
-    })
+export const createRefreshToken = ( payload: IRfreshTokenPayload) => {
 
-    return token;
-  }
+  const token = sign(payload, "SECRET", {
+    expiresIn : 30 * 60000
+  })
 
-  verifyToken(token: string) {
-    const payload  = jwt.verify(token, "SECRET")
+  return token;
+}
+
+export const decodeToken = <T>(token: string):T => {
+  return decode(token, {json: true}) as T
+}
+
+export const verifyToken = <T>(token: string) : boolean | T => {
+
+  try {
+    const payload = verify(token, "SECRET") as T
     return payload
+  } catch (error) {
+    return false
   }
-
 
 }
+

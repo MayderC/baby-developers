@@ -1,36 +1,92 @@
 import {Request, Response} from 'express'
 import IAuthService from '../../../Application/Ports/Services/IAuthService';
-import AuthService from '../../../Application/Adapters/Services/AuthService';
 import IUser from '../../../Application/Entities/Pojo/IUser';
-import ILoginRequest from '../../../Application/Entities/Pojo/DTOs/Auth/ILoginRequest';
-import UserRepository from './../../../Application/Adapters/Repositories/UserRepository';
+import {OK, BAD, ERROR, UNAUTHORIZED} from '../http-status'
+import IRegisterRequest from '../../../Application/Entities/DTOs/Auth/IRegisterRequest';
+import IRegisterResponse from '../../../Application/Entities/DTOs/Auth/IRegisterResponse';
+import {createRefreshToken, decodeToken, createToken} from './../helpers/JsonWebToken';
+import ILoginResponse from './../../../Application/Entities/DTOs/Auth/ILoginResponse';
+import IUserService from '../../../Application/Ports/Services/IUserService';
+import { IRfreshTokenPayload } from '../helpers/ITokenPayload';
 
-const _authService = new AuthService(new UserRepository())
 
 export default class AuthController {
   
   private _authService : IAuthService;
-  
-  constructor(authService : AuthService){
-    this._authService = authService
+  private _userService : IUserService
+
+  constructor(authService : IAuthService, userService: IUserService ){
+    this._authService = authService;
+    this._userService = userService;
   }
 
   async login(req: Request, res: Response): Promise<Response<IUser>>{
     try {
-      const login : ILoginRequest = req.body
-      //todo map login request to user
-      const response: IUser = await this._authService.login({email: "",id: "",password : "",username: ""});
-      // map user to login response
-      return res.status(200).json(response);
+      const user: IUser = await this._authService.login(req.body.user);
+      const response : IRegisterResponse  = {
+        isAuthenticated : true,
+        refreshToken : createRefreshToken({id : user.id}),
+        token : createToken({
+          id : user.id,
+          username : user.username,
+          roles: []
+        })
+      }
+      
+      return res.status(OK).json(response);
     } catch (error) {
       console.log(error);
-      return res.status(400);
+      return res.status(BAD);
     }
   }
 
-  async register(res: Response, req: Request): Promise<Response<IUser>>{
+  async register(req: Request, res: Response): Promise<Response<IUser>>{
+    try {
+      const userToRegister: IRegisterRequest = req.body.user
+      const userMapped : IUser = {id: "", ...userToRegister}
+      const user: IUser = await this._authService.register(userMapped)
+  
+      const response : IRegisterResponse  = {
+        isAuthenticated : true,
+        refreshToken : createRefreshToken({id: user.id}),
+        token : createToken({
+          id : user.id,
+          username : user.username,
+          roles: []
+        })
+      }
 
-    const user: IUser = await this._authService.register({email: "",id: "",password : "",username: ""})
-    return res.status(200).send(user)
+      return res.status(OK).send(response)
+    } catch (error) {
+      return res.status(BAD).send(ERROR)
+    }
+
+  }
+
+  async refreshToken(req: Request, res: Response): Promise<Response> {
+    try {
+
+      const payload = decodeToken<IRfreshTokenPayload>(req.header('Authorization'))
+      const user: IUser = await this._userService.getById(payload.id)
+      
+      
+      const refresh = createRefreshToken(payload)
+      const token = createToken({
+        id: user.id,
+        username: user.username,
+        roles: []
+      })
+
+      const response: ILoginResponse = {
+        isAuthenticated : true,
+        refreshToken: refresh,
+        token : token
+      } 
+
+      return res.status(OK).send(response)
+    } catch (error) {
+      return res.status(BAD).send()
+    }
+
   }
 }

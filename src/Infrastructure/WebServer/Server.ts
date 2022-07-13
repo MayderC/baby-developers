@@ -2,24 +2,22 @@ const cors = require('cors')
 const express =  require('express')
 import ISetup from '../../ISetup';
 import dataSource from '../Database/DataSource'
-import userRoutes from './Routes/user.routes';
-import authRoutes from './Routes/auth.routes'
-import DependencyContainer from '../../container/DependencyContainer';
-
 
 export default class Server implements ISetup{
 
-  private _dependencyContainer: DependencyContainer;
+
   private app  = express(); 
-  PORT = process.env.PORT || 3000;
+  PORT = process.env.PORT || 5000;
   PATH : string = '/api/';
 
-  private _usercotroller = 'UserController'
-  private _authController = "AuthController"
+  private userRoutes;
+  private authRoutes;
 
-  constructor(){
-    this._dependencyContainer = new DependencyContainer()
+  constructor(userRoutes, authRoutes){
+    this.userRoutes = userRoutes
+    this.authRoutes = authRoutes
     this.middlewares()
+    this.routes()
     this.databaseConexion()
   }
 
@@ -33,14 +31,16 @@ export default class Server implements ISetup{
     this.app.use(cors())
     this.app.use(express.json())
   }
+  
   routes(){
-    this.app.use(this.PATH + 'auth', authRoutes(this._dependencyContainer.getContainer.resolve(this._authController)))
-    this.app.use(this.PATH + 'user', userRoutes(this._dependencyContainer.getContainer.resolve(this._usercotroller)))
+
+    this.app.use(this.PATH + 'auth', this.authRoutes)
+    this.app.use(this.PATH + 'user', this.userRoutes)
   }
 
   start(){
     this.app.listen(this.PORT, () =>{
-    this.routes()
-    console.log(`Listen on port: ${this.PORT}`)})
+      console.log(`Listen on port: ${this.PORT}`)
+    })
   }
 }

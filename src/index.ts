@@ -1,7 +1,8 @@
-
-import Server from './Infrastructure/WebServer/Server';
 import ISetup from './ISetup';
+import  DependencyContainer from './container/DependencyContainer';
 
-const server : ISetup = new Server()
 
+
+const dependencyContainer = new DependencyContainer()
+const server : ISetup = dependencyContainer.getContainer.resolve('Server')
 server.start()
