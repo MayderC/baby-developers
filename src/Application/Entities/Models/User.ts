@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany, Unique, 
 import IComment from "../Pojo/IComment";
 import IUser from './../Pojo/IUser';
 import {Role} from './Role'
-import { Comment } from './Comment';
+import  {Comment}  from './Comment';
 
 
 @Entity()

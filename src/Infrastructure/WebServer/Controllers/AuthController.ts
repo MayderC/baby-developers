@@ -1,7 +1,7 @@
 import {Request, Response} from 'express'
 import IAuthService from '../../../Application/Ports/Services/IAuthService';
 import IUser from '../../../Application/Entities/Pojo/IUser';
-import {OK, BAD, ERROR, UNAUTHORIZED} from '../http-status'
+import {OK, BAD, ERROR} from '../http-status'
 import IRegisterRequest from '../../../Application/Entities/DTOs/Auth/IRegisterRequest';
 import IRegisterResponse from '../../../Application/Entities/DTOs/Auth/IRegisterResponse';
 import {createRefreshToken, decodeToken, createToken} from './../helpers/JsonWebToken';

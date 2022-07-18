@@ -6,7 +6,7 @@ import IComments from './../Pojo/IComment';
 import { User } from './User';
 
 @Entity()
-export class Comment implements IComments {
+export  class Comment implements IComments {
   @PrimaryGeneratedColumn('uuid')
   id: string
 

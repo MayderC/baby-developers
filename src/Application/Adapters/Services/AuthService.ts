@@ -1,5 +1,5 @@
 import IAuthService from '../../Ports/Services/IAuthService';
-import IUser from '../../Entities/Pojo/IUser';
+import {IUser} from '../../Entities/Pojo';
 import IRepository from '../../Ports/Repositories/IRepository';
 import {genSaltSync, hashSync, compareSync} from 'bcrypt'
 import {v4 as uuidv4} from 'uuid';
