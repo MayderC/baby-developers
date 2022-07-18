@@ -1,3 +1,4 @@
+import IComments from './IComment';
 export default interface IUser {
 
   id: string;
@@ -5,5 +6,6 @@ export default interface IUser {
   email : string;
   password : string;
  // roles : [];
+  comments : IComments[];
 
 }

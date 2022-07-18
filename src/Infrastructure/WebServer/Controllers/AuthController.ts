@@ -8,6 +8,7 @@ import {createRefreshToken, decodeToken, createToken} from './../helpers/JsonWeb
 import ILoginResponse from './../../../Application/Entities/DTOs/Auth/ILoginResponse';
 import IUserService from '../../../Application/Ports/Services/IUserService';
 import { IRfreshTokenPayload } from '../helpers/ITokenPayload';
+import { NOT_FOUND } from './../http-status/index';
 
 
 export default class AuthController {
@@ -23,6 +24,8 @@ export default class AuthController {
   async login(req: Request, res: Response): Promise<Response<IUser>>{
     try {
       const user: IUser = await this._authService.login(req.body.user);
+      if(!user) return res.status(NOT_FOUND).send()
+      
       const response : IRegisterResponse  = {
         isAuthenticated : true,
         refreshToken : createRefreshToken({id : user.id}),
