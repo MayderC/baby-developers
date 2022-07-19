@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany, ManyToOne } from "typeorm"
-import IPost from './../Pojo/IPost';
-import TagsPost from './TagsPost'
-import { Company } from "./Company";
+import { Company, User, TagsPost } from "./";
+import {IPost} from './../Pojo/';
+
 
 @Entity()
 export class Post implements IPost {
@@ -23,6 +23,9 @@ export class Post implements IPost {
   @ManyToMany(() => TagsPost)
   @JoinTable()
   tags: TagsPost[];
+
+  @ManyToOne(() => User, (user) => user.posts )
+  user : User
 
   @Column()
   isActive: boolean

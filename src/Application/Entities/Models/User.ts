@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany, Unique, Index, OneToMany } from "typeorm"
+import {Role, Comment, Post} from './'
 import IComment from "../Pojo/IComment";
 import IUser from './../Pojo/IUser';
-import {Role} from './Role'
-import  {Comment}  from './Comment';
+
 
 
 @Entity()
@@ -30,5 +30,8 @@ export class User implements IUser {
   roles: Role[];
 
   @OneToMany(() => Comment, (comment) => comment.user)
-  comments: IComment[];
+  comments: Comment[]
+
+  @OneToMany(() => Post, (posts) => posts.user)
+  posts: Post[]
 }

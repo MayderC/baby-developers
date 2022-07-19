@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm"
-import {Comment, User, Role} from '../../Application/Entities/Models/'
+import {Comment, User, Role, Post, Company, TagsPost} from '../../Application/Entities/Models/'
+
 
 // todo: implement environment vars
 
@@ -10,7 +11,7 @@ export default  new DataSource({
     username: "babydev",
     password: "mayder",
     database: "babydev",
-    entities: [User, Role, Comment],
+    entities: [User, Role, Comment, Post, Company, TagsPost],
     extra: {
       options: {
         encrypt: false,

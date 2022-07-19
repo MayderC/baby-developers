@@ -4,7 +4,7 @@ import { ITagsPost } from './../Pojo/ITagsPost';
 
 @Unique(['name'])
 @Entity()
-export default class TagsPost implements ITagsPost {
+export class TagsPost implements ITagsPost {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
