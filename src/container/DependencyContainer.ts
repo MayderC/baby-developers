@@ -7,6 +7,8 @@ import Server from './../Infrastructure/WebServer/Server';
 import userRoutes from '../Infrastructure/WebServer/Routes/user.routes';
 import authRoutes from '../Infrastructure/WebServer/Routes/auth.routes';
 import UserRepository from '../Application/Adapters/Repositories/UserRepository';
+import BaseRepository from './../Application/Adapters/Repositories/BaseRepository';
+import { Company } from './../Application/Entities/Models/Company';
 
 
 
@@ -58,7 +60,8 @@ export default class DependencyContainer {
   
   registerRepositories(){
     this._container.register({
-      userRepository : asClass(UserRepository).scoped()
+      userRepository : asClass(UserRepository).scoped(),
+      compayRepository: asClass(BaseRepository<Company>).scoped()
     })
   }
 

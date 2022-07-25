@@ -1,12 +1,9 @@
 import {Request, Response} from 'express'
-import IAuthService from '../../../Application/Ports/Services/IAuthService';
+import {IAuthService, IUserService} from '../../../Application/Ports/Services';
 import IUser from '../../../Application/Entities/Pojo/IUser';
 import {OK, BAD, ERROR} from '../http-status'
-import IRegisterRequest from '../../../Application/Entities/DTOs/Auth/IRegisterRequest';
-import IRegisterResponse from '../../../Application/Entities/DTOs/Auth/IRegisterResponse';
+import {IRegisterRequest, IRegisterResponse, ILoginResponse} from '../DTOs/Auth';
 import {createRefreshToken, decodeToken, createToken} from './../helpers/JsonWebToken';
-import ILoginResponse from './../../../Application/Entities/DTOs/Auth/ILoginResponse';
-import IUserService from '../../../Application/Ports/Services/IUserService';
 import { IRfreshTokenPayload } from '../helpers/ITokenPayload';
 import { NOT_FOUND } from './../http-status/index';
 
@@ -63,15 +60,12 @@ export default class AuthController {
     } catch (error) {
       return res.status(BAD).send(ERROR)
     }
-
   }
 
   async refreshToken(req: Request, res: Response): Promise<Response> {
     try {
-
       const payload = decodeToken<IRfreshTokenPayload>(req.header('Authorization'))
       const user: IUser = await this._userService.getById(payload.id)
-      
       
       const refresh = createRefreshToken(payload)
       const token = createToken({
@@ -90,6 +84,5 @@ export default class AuthController {
     } catch (error) {
       return res.status(BAD).send()
     }
-
   }
 }

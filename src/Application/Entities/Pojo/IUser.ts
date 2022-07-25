@@ -1,4 +1,3 @@
-import IComments from './IComment';
 export default interface IUser {
 
   id: string;
