@@ -8,8 +8,12 @@ export default class BaseRepository<T> implements IRepository<T> {
  
   private _entity;
 
-  constructor(entity : EntityTarget<T>){
-    this._entity = entity
+  constructor(){
+    
+  }
+
+  setEntity(entity : EntityTarget<T>){
+    this._entity  = entity
   }
   
   async getById(id: string): Promise<typeof this._entity | null> {
@@ -30,8 +34,8 @@ export default class BaseRepository<T> implements IRepository<T> {
 
     return !!data.affected
   }
-  async update(entity: any): Promise<boolean> {
-    await AppDataSource.manager.update(this._entity, {where : {id: entity.id}}, entity)
+  async update(entity: T, id: string): Promise<boolean> {
+    await AppDataSource.manager.update(this._entity, {where : {id: id}}, entity)
     return true
   }
 

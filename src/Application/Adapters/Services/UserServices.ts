@@ -20,6 +20,7 @@ export default class UserService implements IUserService{
     const users : Array<IUser> = await this._userRespository.getAll();
     return users;
   }
+
   async getById(id: string): Promise<IUser | null> {
     const user: IUser | null = await this._userRespository.getById(id);
     return user;
@@ -33,6 +34,7 @@ export default class UserService implements IUserService{
   async delete(id: string): Promise<boolean> {
     return await this._userRespository.delete(id)
   }
+
   update(user: IUser): boolean {
     throw new Error("Method not implemented.");
   }

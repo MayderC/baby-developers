@@ -17,8 +17,8 @@ export class Post implements IPost {
   @Column()
   description: string;
 
-  @ManyToOne(() => Company, (company) => company.posts)
-  company: Company
+  //@ManyToOne(() => Company, (company) => company.posts)
+  //company: Company
 
   @ManyToMany(() => TagsPost)
   @JoinTable()

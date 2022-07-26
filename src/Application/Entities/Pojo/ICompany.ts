@@ -7,6 +7,6 @@ export default interface ICompany {
   website: string;
   description: string;
   logo: string;
-  posts : IPost []
+  //posts : IPost []
 
 }

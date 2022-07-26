@@ -6,9 +6,11 @@ import AuthService from '../Application/Adapters/Services/AuthService';
 import Server from './../Infrastructure/WebServer/Server';
 import userRoutes from '../Infrastructure/WebServer/Routes/user.routes';
 import authRoutes from '../Infrastructure/WebServer/Routes/auth.routes';
+import postRoutes from '../Infrastructure/WebServer/Routes/post.routes';
 import UserRepository from '../Application/Adapters/Repositories/UserRepository';
 import BaseRepository from './../Application/Adapters/Repositories/BaseRepository';
-import { Company } from './../Application/Entities/Models/Company';
+import PostService from './../Application/Adapters/Services/PostService';
+import PostController from './../Infrastructure/WebServer/Controllers/PostController';
 
 
 
@@ -40,28 +42,32 @@ export default class DependencyContainer {
   registerRoutes(){
     this._container.register({
       userRoutes: asFunction(userRoutes),
-      authRoutes: asFunction(authRoutes)
+      authRoutes: asFunction(authRoutes),
+      postRoutes: asFunction(postRoutes)
     })
   }
 
   registerCotrollers(){
     this._container.register({
       authController : asClass(AuthController).scoped(),
-      userController : asClass(UserController).scoped()
+      userController : asClass(UserController).scoped(),
+      postController : asClass(PostController).scoped()
     })
   }
 
   registerServices(){
     this._container.register({
       userService : asClass(UserService).scoped(),
-      authService : asClass(AuthService).scoped()
+      authService : asClass(AuthService).scoped(),
+      postService : asClass(PostService).scoped()
     })   
   }
   
   registerRepositories(){
     this._container.register({
       userRepository : asClass(UserRepository).scoped(),
-      compayRepository: asClass(BaseRepository<Company>).scoped()
+      compayRepository: asClass(BaseRepository).scoped(),
+      postRepository: asClass(BaseRepository).scoped()
     })
   }
 

@@ -22,8 +22,8 @@ export class Company implements ICompany {
   @Column()
   logo: string;
 
-  @OneToMany(() => Post, (posts) => posts.company)
-  posts: Post[]
+ // @OneToMany(() => Post, (posts) => posts.company)
+  //posts: Post[]
 
   @Column()
   isActive: boolean
