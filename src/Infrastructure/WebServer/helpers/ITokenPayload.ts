@@ -6,6 +6,6 @@ export interface ITokenPayload {
   roles : []
 }
 
-export interface IRfreshTokenPayload {
+export interface IRefreshTokenPayload {
   id: string;
 }

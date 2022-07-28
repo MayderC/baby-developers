@@ -1,6 +1,8 @@
 import {Router} from 'express';
 import {body, check, header} from 'express-validator'
-import { validateJWT } from '../Middlewares/JsonWebToken';
+import { IRefreshTokenPayload } from '../helpers/ITokenPayload';
+import { HEADER_AUTHORIZATION } from '../http-status';
+import { validateRefreshJWT } from '../Middlewares/JsonWebToken';
 import { validation } from '../Middlewares/validationResult';
 import AuthController from './../Controllers/AuthController';
 const router = Router();
@@ -30,8 +32,8 @@ export default (authController: AuthController) => {
   ], authController.register.bind(authController))
 
   router.get('/refresh', [
-    header(['Authorization', 'invalid token']).notEmpty(),
-    validateJWT,
+    header([HEADER_AUTHORIZATION, 'invalid token']).notEmpty(),
+    validateRefreshJWT,
     validation
   ], authController.refreshToken.bind(authController))
 

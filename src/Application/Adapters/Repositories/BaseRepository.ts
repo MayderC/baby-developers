@@ -35,7 +35,7 @@ export default class BaseRepository<T> implements IRepository<T> {
     return !!data.affected
   }
   async update(entity: T, id: string): Promise<boolean> {
-    await AppDataSource.manager.update(this._entity, {where : {id: id}}, entity)
+    await AppDataSource.manager.update<T>(this._entity, {id: id}, entity)
     return true
   }
 

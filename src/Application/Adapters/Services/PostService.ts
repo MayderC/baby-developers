@@ -2,7 +2,7 @@ import { IPost } from '../../Entities/Pojo';
 import IPostService from './../../Ports/Services/IPostService';
 import BaseRepository from './../Repositories/BaseRepository';
 import { Post } from './../../Entities/Models/Post';
-
+import {v4 as uuidv4} from 'uuid';
 
 export default class PostService implements IPostService {
 
@@ -15,7 +15,7 @@ export default class PostService implements IPostService {
 
   }
 
-  async getById(id: string): Promise<IPost> {
+  async getById(id: string): Promise<Post> {
     return await this._postRepository.getById(id);
   }
 
@@ -34,7 +34,8 @@ export default class PostService implements IPostService {
    return true
   }
   
-  async save(post: Post): Promise<IPost> {
-   return await this._postRepository.save(post) 
+  async save(post: Post): Promise<Post> {
+    post.id = uuidv4()
+    return await this._postRepository.save(post) 
   }
 }

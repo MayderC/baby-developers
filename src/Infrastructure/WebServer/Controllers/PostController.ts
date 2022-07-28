@@ -29,7 +29,7 @@ export default class PostController {
       const posts : Array<IPost> = await this._postService.getAll()
       return res.status(OK).send(posts)
     } catch (error) {
-      return res.status(BAD).send()
+      return res.status(BAD).send(error)
     }
   }
 
@@ -44,9 +44,12 @@ export default class PostController {
 
   async update(req: Request, res: Response): Promise<Response> {
     try {
-      await this._postService.update(req.body.post, req.body.post.id)
+      console.log(req.params.id, req.body.post)
+      const {tags, ...postToUpdate} = req.body.post
+      await this._postService.update(postToUpdate, req.params.id)
       return res.status(OK).send()
     } catch (error) {
+      console.log(error)
       return res.status(BAD).send()
     }
   }
