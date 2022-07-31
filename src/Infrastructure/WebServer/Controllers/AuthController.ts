@@ -43,8 +43,10 @@ export default class AuthController {
   async register(req: Request, res: Response): Promise<Response<IUser>>{
     try {
       const userToRegister: IRegisterRequest = req.body.user
+      const { role } = userToRegister
       const userMapped : IUser = {id: "", ...userToRegister}
-      const user: IUser = await this._authService.register(userMapped)
+      const user: IUser = await this._authService.register(userMapped, role)
+
   
       const response : IRegisterResponse  = {
         isAuthenticated : true,

@@ -67,7 +67,8 @@ export default class DependencyContainer {
     this._container.register({
       userRepository : asClass(UserRepository).scoped(),
       compayRepository: asClass(BaseRepository).scoped(),
-      postRepository: asClass(BaseRepository).scoped()
+      postRepository: asClass(BaseRepository).scoped(),
+      userRolRepository : asClass(BaseRepository).scoped(),
     })
   }
 

@@ -1,16 +1,17 @@
 import { DataSource } from "typeorm"
 import {Comment, User, Role, Post, Company, TagsPost} from '../../Application/Entities/Models/'
+import { IEnvironment } from "../../Environments/IEnvironment"
+import Environments from "../../Environments/index"
 
-
-// todo: implement environment vars
+const env: IEnvironment = Environments
 
 export default  new DataSource({
-    type: "mssql",
-    host: "127.0.0.1",
-    port: 1433,
-    username: "babydev",
-    password: "mayder",
-    database: "babydev",
+    type: env.DB_TYPE,
+    host: env.DB_HOST,
+    port: env.DB_PORT,
+    username: env.DB_USERNAME,
+    password: env.DB_PASSWORD,
+    database: env.DB_NAME,
     entities: [User, Role, Comment, Post, Company, TagsPost],
     extra: {
       options: {
