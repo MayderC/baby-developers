@@ -38,8 +38,8 @@ export default class UserRepository implements IUserRepository<IUser> {
     return true
   }
 
-  async save(user: IUser): Promise<IUser> {
-    await AppDataSource.manager.insert(User, user)
+  async save(user: User): Promise<User> {
+    await AppDataSource.manager.save(User, user)
     return user
   }
 

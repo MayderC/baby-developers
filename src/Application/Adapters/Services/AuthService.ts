@@ -6,6 +6,7 @@ import {v4 as uuidv4} from 'uuid';
 import BaseRepository from '../Repositories/BaseRepository';
 import { Role } from './../../Entities/Models/Role';
 import { User } from '../../Entities/Models';
+import { SALT } from '../../constants';
 
 
 
@@ -18,6 +19,7 @@ export default class AuthService implements IAuthService{
   constructor(userRepository: IRepository<IUser>, userRolRepository: BaseRepository<Role>) {
     this._userRepository = userRepository
     this._userRoleRepository = userRolRepository
+    this._userRoleRepository.setEntity(Role)
   }
 
   async login(login: IUser): Promise<IUser | null> {
@@ -29,16 +31,16 @@ export default class AuthService implements IAuthService{
     return user
   }
   
-  async register(request: User, role: string): Promise<IUser> {
+  async register(user: User, role: string): Promise<IUser> {
+    user.id = uuidv4()
+    user.password = hashSync(user.password, genSaltSync(SALT))
+    user.isActive = true
 
-    const salt = genSaltSync(10)
-    request.id = uuidv4()
-    
-    const roleToSave = await this._userRoleRepository.get({name: role})
-    if(!roleToSave) throw new Error(`invalid role ${role}`)
-
-    request.roles.push(roleToSave)
-    request.password = hashSync(request.password, salt)
-    return await this._userRepository.save(request);
+    try {
+      user.roles = [await this._userRoleRepository.get({name: role})]
+    } catch (error) {      
+      throw new Error(`invalid role ${role}`)
+    }
+    return await this._userRepository.save(user);
   }
 }

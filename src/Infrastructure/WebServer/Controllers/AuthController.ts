@@ -35,7 +35,6 @@ export default class AuthController {
       
       return res.status(OK).json(response);
     } catch (error) {
-      console.log(error);
       return res.status(BAD);
     }
   }
@@ -64,6 +63,7 @@ export default class AuthController {
 
       return res.status(OK).send(response)
     } catch (error) {
+      console.log(error)
       return res.status(BAD).send(ERROR)
     }
   }

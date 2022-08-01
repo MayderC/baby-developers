@@ -36,6 +36,12 @@ export default (authController: AuthController) => {
     check('user.password', 'the password is requerid')
     .notEmpty().withMessage('password must not be empty')
     .isLength({max: 16, min : 6}).withMessage('must be at least 16 chars long and 6 min'),
+
+    check('user.role', 'the role is requerid').custom(async (value) => {
+      // todo 
+      //controller role, get by name, 
+      return true
+    }).withMessage(`invalid role`),
     
     validation
   ], authController.register.bind(authController))
