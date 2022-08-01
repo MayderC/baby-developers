@@ -42,9 +42,13 @@ export default class AuthController {
 
   async register(req: Request, res: Response): Promise<Response<IUser>>{
     try {
-      const userToRegister: IRegisterRequest = req.body.user
-      const { role } = userToRegister
-      const userMapped : IUser = {id: "", ...userToRegister}
+
+      //property role is not part of IUser, but is in User Entity /models
+
+      const userWhitRole: IRegisterRequest = req.body.user
+      const { role, ...userWhitOutRole } = userWhitRole
+      
+      const userMapped : IUser = {id: "", ...userWhitOutRole}
       const user: IUser = await this._authService.register(userMapped, role)
 
   

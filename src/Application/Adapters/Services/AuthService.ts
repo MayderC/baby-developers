@@ -33,10 +33,12 @@ export default class AuthService implements IAuthService{
 
     const salt = genSaltSync(10)
     request.id = uuidv4()
+    
     const roleToSave = await this._userRoleRepository.get({name: role})
+    if(!roleToSave) throw new Error(`invalid role ${role}`)
+
     request.roles.push(roleToSave)
     request.password = hashSync(request.password, salt)
-
     return await this._userRepository.save(request);
   }
 }

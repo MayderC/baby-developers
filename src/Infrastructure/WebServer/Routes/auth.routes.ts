@@ -25,9 +25,18 @@ export default (authController: AuthController) => {
   ],authController.login.bind(authController))
 
   router.post('/register', [
-    check(['user.username', 'the username is requerid']).notEmpty().isLength({max: 16, min : 3}),
-    check(['user.email', 'the email is required']).isEmail().notEmpty(),
-    check(['user.password', 'the password is requerid']).notEmpty().isLength({max: 16, min : 6}),
+    check('user.username', 'the username is requerid')
+    .notEmpty().withMessage('username must not be empty')
+    .isLength({max: 16, min : 3}).withMessage('must be at least 16 chars long and 3 min'),
+
+    check('user.email', 'the email is required')
+    .isEmail().withMessage('email must be a valid email address')
+    .notEmpty().withMessage('email must not be empty'),
+
+    check('user.password', 'the password is requerid')
+    .notEmpty().withMessage('password must not be empty')
+    .isLength({max: 16, min : 6}).withMessage('must be at least 16 chars long and 6 min'),
+    
     validation
   ], authController.register.bind(authController))
 
