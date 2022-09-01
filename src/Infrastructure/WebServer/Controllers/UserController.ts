@@ -1,4 +1,5 @@
 import {Request, Response} from 'express'
+import e = require('express');
 import IUser from '../../../Application/Entities/Pojo/IUser';
 import IUserService from '../../../Application/Ports/Services/IUserService';
 import {BAD,OK, DELETED, UPDATED, ERROR, SAVED, sendMsg} from '../http-status'
@@ -65,6 +66,7 @@ export default class UserController {
       return res.status(OK).send(user)
 
     } catch (error) {
+      console.log(error)
       return res.status(BAD).send(ERROR)
     }
   }

@@ -1,56 +1,15 @@
 import {Router} from 'express';
-import {body, check, header} from 'express-validator'
-import { IRefreshTokenPayload } from '../helpers/ITokenPayload';
-import { HEADER_AUTHORIZATION } from '../http-status';
-import { validateRefreshJWT } from '../Middlewares/JsonWebToken';
-import { validation } from '../Middlewares/validationResult';
 import AuthController from './../Controllers/AuthController';
+import { loginMiddlewares, registerMiddlewares, refreshMiddlewares } from './../Middlewares/routes/auth/authMiddlewares';
 const router = Router();
 
 
 
 export default (authController: AuthController) => {
   
-  router.post('/login',[
-    check('user.username', 'the username is requerid')
-    .notEmpty()
-    .isLength({max: 16, min : 3})
-    .withMessage('must be at least 16 chars long and 3 min'),
-
-    check('user.password', 'the password is requerid')
-    .notEmpty()
-    .isLength({max: 16, min : 6})
-    .withMessage('must be at least 16 chars long and 6 min'),
-    validation
-  ],authController.login.bind(authController))
-
-  router.post('/register', [
-    check('user.username', 'the username is requerid')
-    .notEmpty().withMessage('username must not be empty')
-    .isLength({max: 16, min : 3}).withMessage('must be at least 16 chars long and 3 min'),
-
-    check('user.email', 'the email is required')
-    .isEmail().withMessage('email must be a valid email address')
-    .notEmpty().withMessage('email must not be empty'),
-
-    check('user.password', 'the password is requerid')
-    .notEmpty().withMessage('password must not be empty')
-    .isLength({max: 16, min : 6}).withMessage('must be at least 16 chars long and 6 min'),
-
-    check('user.role', 'the role is requerid').custom(async (value) => {
-      // todo 
-      //controller role, get by name, 
-      return true
-    }).withMessage(`invalid role`),
-    
-    validation
-  ], authController.register.bind(authController))
-
-  router.get('/refresh', [
-    header([HEADER_AUTHORIZATION, 'invalid token']).notEmpty(),
-    validateRefreshJWT,
-    validation
-  ], authController.refreshToken.bind(authController))
+  router.post('/login', loginMiddlewares, authController.login.bind(authController))
+  router.post('/register', registerMiddlewares, authController.register.bind(authController))
+  router.get('/refresh', refreshMiddlewares, authController.refreshToken.bind(authController))
 
   return router; 
 }

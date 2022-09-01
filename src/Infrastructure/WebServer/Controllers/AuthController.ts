@@ -1,22 +1,12 @@
 import { Request, Response } from "express";
-import {
-  IAuthService,
-  IUserService,
-} from "../../../Application/Ports/Services";
+import {IAuthService, IUserService} from "../../../Application/Ports/Services";
 import IUser from "../../../Application/Entities/Pojo/IUser";
 import { OK, BAD, ERROR } from "../http-status";
-import {
-  IRegisterRequest,
-  IRegisterResponse,
-  ILoginResponse,
-} from "../DTOs/Auth";
-import {
-  createRefreshToken,
-  decodeToken,
-  createToken,
-} from "./../helpers/JsonWebToken";
+import { IRegisterRequest, IRegisterResponse, ILoginResponse } from "../DTOs/Auth";
+import {createRefreshToken, decodeToken, createToken,} from "./../helpers/JsonWebToken";
 import { IRefreshTokenPayload } from "../helpers/ITokenPayload";
 import { NOT_FOUND } from "./../http-status/index";
+
 
 export default class AuthController {
   private _authService: IAuthService;
