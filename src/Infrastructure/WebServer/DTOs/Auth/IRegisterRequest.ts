@@ -1,8 +1,9 @@
+import IRole from './../../../../Application/Entities/Pojo/IRole';
 export default interface IRegisterRequest {
 
-  username: string;
+  fullName: string;
   email: string;
   password: string;
-  role : string;
+  roles : IRole[];
 
 }

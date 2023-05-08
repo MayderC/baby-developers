@@ -1,12 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany, ManyToOne } from "typeorm"
-import { Company, User, TagsPost } from "./";
-import {IPost} from './../Pojo/';
-
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
+import { Company, User, Tags } from "./";
+import { IPost } from "./../Pojo/";
+import { PostTags } from "./PostTags";
 
 @Entity()
 export class Post implements IPost {
-  @PrimaryGeneratedColumn('uuid')
-  id: string
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
   title: string;
@@ -17,16 +25,15 @@ export class Post implements IPost {
   @Column()
   description: string;
 
-  //@ManyToOne(() => Company, (company) => company.posts)
-  //company: Company
+  @OneToMany(() => PostTags, (postTags) => postTags.tags)
+  tagsPost: PostTags[];
 
-  @ManyToMany(() => TagsPost)
-  @JoinTable()
-  tags: TagsPost[];
+  @ManyToOne(() => User, (user) => user.posts)
+  user: User;
 
-  @ManyToOne(() => User, (user) => user.posts )
-  user : User
+  @ManyToOne(() => Company, (company) => company.posts)
+  company: Post[];
 
   @Column()
-  isActive: boolean
+  isActive: boolean;
 }

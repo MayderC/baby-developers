@@ -1,9 +1,10 @@
+import IRole from './IRole';
 export default interface IUser {
 
   id: string;
-  username : string;
+  fullName : string;
   email : string;
   password : string;
- // roles : [];
+  roles : Promise<IRole[]> | IRole[]
 
 }

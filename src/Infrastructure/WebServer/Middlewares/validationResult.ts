@@ -1,7 +1,7 @@
+import   {validationResult} from 'express-validator';
 import { NextFunction, Request, Response } from "express";
 import { BAD } from "../http-status";
 
-const { validationResult } = require('express-validator');
 
 
 

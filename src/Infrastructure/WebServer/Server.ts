@@ -3,6 +3,7 @@ const express =  require('express')
 import ISetup from '../../ISetup';
 import dataSource from '../Database/DataSource'
 
+
 export default class Server implements ISetup{
 
   private app  = express(); 
@@ -30,7 +31,7 @@ export default class Server implements ISetup{
 
   middlewares(){
     this.app.use(cors())
-    this.app.use(express.json())
+    this.app.use(express.json())    
   }
   
   routes(){

@@ -20,13 +20,27 @@ export default class AuthService implements IAuthService {
     this._userRoleRepository = userRolRepository;
     this._userRoleRepository.setEntity(Role);
   }
+  requestToResetPassword(email: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  async resetPassword(password: string, id: string) {
+    const user = await this._userRepository.getById(id);
+    const { roles, ...toUpdate } = user;
+    toUpdate.password = hashSync(password, genSaltSync(SALT));
+    await this._userRepository.update(toUpdate, id);
+  }
 
-  async login(login: IUser): Promise<IUser | null> {
-    const user = await this._userRepository.get({ username: login.username });
-    if (!user) return null;
-    if (!compareSync(login.password, user.password)) return null;
+  async login(login: IUser): Promise<IUser> {
+    try {
+      const user = await this._userRepository.get({ email: login.email });
+      if (!user) throw new Error(`invalid credentials`);
+      if (!compareSync(login.password, user.password))
+        throw new Error(`invalid credentials`);
 
-    return user;
+      return user;
+    } catch (error) {
+      throw new Error(`invalid credentials`);
+    }
   }
 
   async register(user: User, role: string): Promise<IUser> {
@@ -37,8 +51,14 @@ export default class AuthService implements IAuthService {
     try {
       user.roles = [await this._userRoleRepository.get({ name: role })];
     } catch (error) {
+      console.log(error, "ROLE");
       throw new Error(`invalid role ${role}`);
     }
-    return await this._userRepository.save(user);
+    try {
+      return await this._userRepository.save(user);
+    } catch (error) {
+      console.log(error, "SAVE");
+      throw new Error(`invalid credentials`);
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany, Unique, Index, OneToMany } from "typeorm"
 import {Role, Comment, Post} from './'
-import IComment from "../Pojo/IComment";
 import IUser from './../Pojo/IUser';
+import IRole from './../Pojo/IRole';
 
 
 
@@ -11,9 +11,8 @@ export class User implements IUser {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Index({ unique: true })
-  @Column({name: 'username'})
-  username: string;
+  @Column({name: 'fullName'})
+  fullName: string;
 
   @Index({ unique: true })
   @Column({name: 'email'})
@@ -27,7 +26,7 @@ export class User implements IUser {
 
   @ManyToMany(() => Role)
   @JoinTable()
-  roles: Role[];
+  roles: Promise<IRole[]> | IRole[];
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[]

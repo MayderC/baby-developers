@@ -2,8 +2,8 @@
 export interface ITokenPayload {
 
   id: string;
-  username: string;
-  roles : []
+  fullName: string;
+  roles : string[]
 }
 
 export interface IRefreshTokenPayload {

@@ -1,11 +1,15 @@
 import IRepository from "../../Ports/Repositories/IRepository";
 import AppDataSource from "../../../Infrastructure/Database/DataSource";
 import { EntityTarget, FindOptionsWhere } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
 export default class BaseRepository<T> implements IRepository<T> {
   private _entity;
 
   constructor() {}
+  find(options: unknown): Promise<T[]> {
+    throw new Error("Method not implemented.");
+  }
 
   setEntity(entity: EntityTarget<T>) {
     this._entity = entity;
@@ -31,7 +35,7 @@ export default class BaseRepository<T> implements IRepository<T> {
 
     return !!data.affected;
   }
-  async update(entity: T, id: string): Promise<boolean> {
+  async update(entity: QueryDeepPartialEntity<T>, id: string): Promise<boolean> {
     await AppDataSource.manager.update<T>(this._entity, { id: id }, entity);
     return true;
   }

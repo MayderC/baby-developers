@@ -44,7 +44,6 @@ export default class PostController {
 
   async update(req: Request, res: Response): Promise<Response> {
     try {
-      console.log(req.params.id, req.body.post)
       const {tags, ...postToUpdate} = req.body.post
       await this._postService.update(postToUpdate, req.params.id)
       return res.status(OK).send()

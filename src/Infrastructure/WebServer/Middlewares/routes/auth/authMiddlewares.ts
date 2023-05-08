@@ -4,10 +4,9 @@ import { validateRefreshJWT } from '../../JsonWebToken'
 import { validation } from '../../validationResult'
 
 export const loginMiddlewares =  [
-    check('user.username', 'the username is requerid')
+    check('user.email', 'the email is requerid')
     .notEmpty()
-    .isLength({max: 16, min : 3})
-    .withMessage('must be at least 16 chars long and 3 min'),
+    .isEmail(),
 
     check('user.password', 'the password is requerid')
     .notEmpty()
@@ -19,8 +18,8 @@ export const loginMiddlewares =  [
 
 
 export const registerMiddlewares = [
-    check('user.username', 'the username is requerid')
-    .notEmpty().withMessage('username must not be empty')
+    check('user.fullName', 'the fullName is requerid')
+    .notEmpty().withMessage('fullname must not be empty')
     .isLength({max: 16, min : 3}).withMessage('must be at least 16 chars long and 3 min'),
 
     check('user.email', 'the email is required')

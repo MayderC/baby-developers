@@ -2,18 +2,19 @@ import IUser from '../../Entities/Pojo/IUser';
 import AppDataSource from '../../../Infrastructure/Database/DataSource'
 import {User} from '../../Entities/Models/User';
 import { FindOptionsWhere } from 'typeorm';
-import IUserRepository from '../../Ports/Repositories/IUserRepository';
+import IRepository from './../../Ports/Repositories/IRepository';
 
 
 
-export default class UserRepository implements IUserRepository<IUser> {
+export default class UserRepository implements IRepository<IUser> {
+
 
  async get(options: FindOptionsWhere<IUser>): Promise<IUser | null> {
-    return await AppDataSource.manager.findOne(User, {where: options })    
+    return await AppDataSource.manager.findOne(User, {where: options, relations : {roles : true} })    
   }
 
   async getById(id: string): Promise<IUser | null> {
-    return await AppDataSource.manager.findOne(User, {where : {id: id}});
+    return await AppDataSource.manager.findOne(User, {where : {id: id}, relations: {roles: true}});
   }
 
   async getAll(): Promise<Array<IUser>> {
@@ -42,9 +43,4 @@ export default class UserRepository implements IUserRepository<IUser> {
     await AppDataSource.manager.save(User, user)
     return user
   }
-
-  async getByUsername(username: string): Promise<IUser | null> {
-    return await AppDataSource.manager.findOne(User, {where : { username: username}})
-  }
-
 }

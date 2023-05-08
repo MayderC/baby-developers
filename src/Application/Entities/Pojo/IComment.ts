@@ -1,10 +1,5 @@
-
-
-import IUser from './IUser';
+import IUser from "./IUser";
 export default interface IComments {
-
-
   id: string;
-  user : IUser
-
+  user: IUser;
 }
