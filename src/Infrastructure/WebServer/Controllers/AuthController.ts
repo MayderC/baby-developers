@@ -19,7 +19,7 @@ export default class AuthController {
     this._userService = userService;
   }
 
-  async login(req: any, res: Response): Promise<ILoginResponse> {
+  async login(req: any, res: Response): Promise<Response<ILoginResponse>> {
     try {
       const user: IUser = await this._authService.login(req.body.user);
 
@@ -33,12 +33,9 @@ export default class AuthController {
         }),
       };
 
-      res.status(OK).json(response);
-      return Promise.resolve(response)
+      return res.status(OK).json(response);
     } catch (error) {
-      console.log(error)
-      res.status(BAD);
-      return 
+      return res.status(BAD).send(ERROR);
     }
   }
 
