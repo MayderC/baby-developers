@@ -1,5 +1,5 @@
 import IAuthService from "../../Ports/Services/IAuthService";
-import { IUser } from "../../Entities/Pojo";
+import {IRole, IUser} from "../../Entities/Pojo";
 import IRepository from "../../Ports/Repositories/IRepository";
 import { genSaltSync, hashSync, compareSync } from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
@@ -34,30 +34,29 @@ export default class AuthService implements IAuthService {
     try {
       const user = await this._userRepository.get({ email: login.email });
       if (!user) throw new Error(`invalid credentials`);
-      if (!compareSync(login.password, user.password))
-        throw new Error(`invalid credentials`);
-
+      if (!compareSync(login.password, user.password)) throw new Error(`invalid credentials`);
       return user;
     } catch (error) {
       throw new Error(`invalid credentials`);
     }
   }
 
-  async register(user: User, role: string): Promise<IUser> {
+  async register(user: User, role: IRole): Promise<IUser> {
     user.id = uuidv4();
     user.password = hashSync(user.password, genSaltSync(SALT));
     user.isActive = true;
-
     try {
-      user.roles = [await this._userRoleRepository.get({ name: role })];
+      console.log(user, role)
+      const roleSaved =  await this._userRoleRepository.get({ name: role.name })
+      user.roles = [roleSaved];
     } catch (error) {
-      console.log(error, "ROLE");
+      console.log(error)
       throw new Error(`invalid role ${role}`);
     }
     try {
       return await this._userRepository.save(user);
     } catch (error) {
-      console.log(error, "SAVE");
+      console.log(error)
       throw new Error(`invalid credentials`);
     }
   }

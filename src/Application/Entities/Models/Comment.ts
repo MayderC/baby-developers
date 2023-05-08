@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany, ManyToOne } from "typeorm"
 import IComments from './../Pojo/IComment';
-import { User } from './';
+import {Post, User} from './';
 
 @Entity()
 export  class Comment implements IComments {
@@ -18,6 +18,10 @@ export  class Comment implements IComments {
 
   @ManyToOne(() => User, (user) => user.comments)
   user: User
+
+  @ManyToOne(() => Post, (post) => post.comments)
+  post: Post
+
 
   @Column()
   isActive: boolean

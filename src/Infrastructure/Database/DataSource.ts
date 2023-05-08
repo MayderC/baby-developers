@@ -9,7 +9,7 @@ import {
 } from "../../Application/Entities/Models/";
 import { IEnvironment } from "../../Environments/IEnvironment";
 import Environments from "../../Environments/index";
-import { PostTags } from "./../../Application/Entities/Models/PostTags";
+import { PostTags } from "../../Application/Entities/Models/PostTags";
 
 const env: IEnvironment = Environments;
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import {IAuthService, IUserService} from "../../../Application/Ports/Services";
 import IUser from "../../../Application/Entities/Pojo/IUser";
-import { OK, BAD, ERROR, HEADER_AUTHORIZATION } from "../http-status";
+import {OK, BAD, ERROR, HEADER_AUTHORIZATION, sendMsg} from "../http-status";
 import { IRegisterRequest, IRegisterResponse, ILoginResponse } from "../DTOs/Auth";
 import {createRefreshToken, decodeToken, createToken,} from "./../helpers/JsonWebToken";
 import { IRefreshTokenPayload } from "../helpers/ITokenPayload";
@@ -44,12 +44,11 @@ export default class AuthController {
 
   async register(req: Request, res: Response): Promise<Response<IRegisterResponse>> {
     try {
-      console.log("register")
+
       const request: IRegisterRequest = req.body.user;
-      //ad ID property
-      const userMapped: IUser = { id: "", ...request };
-      const user: IUser = await this._authService.register(userMapped, request.roles[0].name);
-      console.log(user.roles)
+      const userMapped: IUser = { id: "", ...request, roles : [] };
+      const user: IUser = await this._authService.register(userMapped, request.roles[0]);
+
       const response: IRegisterResponse = {
         isAuthenticated: true,
         refreshToken: createRefreshToken({ id: user.id }),
@@ -59,10 +58,9 @@ export default class AuthController {
           roles: (user.roles as IRole[]).map(x => x.name),
         }),
       };
-
       return res.status(OK).send(response);
     } catch (error) {
-      console.log(error);
+      console.log(error)
       return res.status(BAD).send(ERROR);
     }
   }

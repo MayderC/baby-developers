@@ -7,7 +7,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { Company, User, Tags } from "./";
+import {Company, User, Tags, Comment} from "./";
 import { IPost } from "./../Pojo/";
 import { PostTags } from "./PostTags";
 
@@ -27,6 +27,9 @@ export class Post implements IPost {
 
   @OneToMany(() => PostTags, (postTags) => postTags.tags)
   tagsPost: PostTags[];
+
+  @OneToMany(()=>Comment, (comment) =>comment.id)
+  comments : Comment[]
 
   @ManyToOne(() => User, (user) => user.posts)
   user: User;

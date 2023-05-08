@@ -2,6 +2,7 @@ import IRepository from "../../Ports/Repositories/IRepository";
 import AppDataSource from "../../../Infrastructure/Database/DataSource";
 import { EntityTarget, FindOptionsWhere } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import {ERROR} from "../../../Infrastructure/WebServer/http-status";
 
 export default class BaseRepository<T> implements IRepository<T> {
   private _entity;
@@ -45,9 +46,11 @@ export default class BaseRepository<T> implements IRepository<T> {
     return entity;
   }
 
-  async get(options: FindOptionsWhere<T>): Promise<T> {
-    return await AppDataSource.manager.findOne(this._entity, {
+  async get(options: FindOptionsWhere<T>): Promise<T | null> {
+    const response =  await AppDataSource.manager.findOne(this._entity, {
       where: options,
     });
+    if(!response) throw new Error('not fount')
+    return response
   }
 }
