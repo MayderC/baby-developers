@@ -12,6 +12,7 @@ export default (postController: PostController) => {
   router.post('/',[
     check('post.title', 'the title is requerid').notEmpty(),
     check('post.body', 'the body is requerid').notEmpty(),
+    check('post.description', 'the body is requerid').notEmpty(),
     validateJWT,
     validation
   ], postController.save.bind(postController))

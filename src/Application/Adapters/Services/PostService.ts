@@ -3,6 +3,7 @@ import IPostService from './../../Ports/Services/IPostService';
 import BaseRepository from './../Repositories/BaseRepository';
 import { Post } from './../../Entities/Models/Post';
 import {v4 as uuidv4} from 'uuid';
+import IPostRequest from "../../DTOs/IPostRequest";
 
 export default class PostService implements IPostService {
 
@@ -16,7 +17,14 @@ export default class PostService implements IPostService {
   }
 
   async getById(id: string): Promise<Post> {
-    return await this._postRepository.getById(id);
+    return await
+        this._postRepository.get({id},
+            {
+              user: true,
+              company: true,
+              tagsPost: true,
+              comments: true
+            });
   }
 
   async getAll(): Promise<Post[]> {
@@ -34,8 +42,10 @@ export default class PostService implements IPostService {
    return true
   }
   
-  async save(post: Post): Promise<Post> {
+  async save(post: IPostRequest): Promise<Post> {
     post.id = uuidv4()
+    post.isActive = true
+    console.log(post)
     return await this._postRepository.save(post) 
   }
 }

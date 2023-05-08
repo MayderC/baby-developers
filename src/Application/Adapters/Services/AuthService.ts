@@ -32,7 +32,7 @@ export default class AuthService implements IAuthService {
 
   async login(login: IUser): Promise<IUser> {
     try {
-      const user = await this._userRepository.get({ email: login.email });
+      const user = await this._userRepository.get({ email: login.email }, {});
       if (!user) throw new Error(`invalid credentials`);
       if (!compareSync(login.password, user.password)) throw new Error(`invalid credentials`);
       return user;
@@ -46,7 +46,6 @@ export default class AuthService implements IAuthService {
     user.password = hashSync(user.password, genSaltSync(SALT));
     user.isActive = true;
     try {
-      console.log(user, role)
       const roleSaved =  await this._userRoleRepository.get({ name: role.name })
       user.roles = [roleSaved];
     } catch (error) {

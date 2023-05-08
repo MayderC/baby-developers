@@ -13,6 +13,7 @@ import { PostTags } from "./PostTags";
 
 @Entity()
 export class Post implements IPost {
+
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -26,16 +27,17 @@ export class Post implements IPost {
   description: string;
 
   @OneToMany(() => PostTags, (postTags) => postTags.tags)
-  tagsPost: PostTags[];
+  tagsPost?: PostTags[];
 
-  @OneToMany(()=>Comment, (comment) =>comment.id)
-  comments : Comment[]
+  @OneToMany(()=>Comment, (comment) =>comment.post)
+  comments? : Comment[]
 
   @ManyToOne(() => User, (user) => user.posts)
-  user: User;
+  user?: User;
+
 
   @ManyToOne(() => Company, (company) => company.posts)
-  company: Post[];
+  company?: Post[];
 
   @Column()
   isActive: boolean;

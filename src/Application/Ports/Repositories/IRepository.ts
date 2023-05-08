@@ -10,6 +10,6 @@ export default interface IRepository<T>{
   update(entity: unknown, id: string): Promise<boolean>;
   save(entity: T): Promise<T>;
   // todo improve this method
-  get(options: unknown): Promise<T | null>;
+  get(options: unknown, relations: unknown): Promise<T | null>;
 
 }

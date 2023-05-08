@@ -6,7 +6,6 @@ import { ITokenPayload, IRefreshTokenPayload  } from '../helpers/ITokenPayload';
 
 
 export const validateJWT = (req: Request, res: Response, next: NextFunction ): Response => {
-
   const token = req.header(HEADER_AUTHORIZATION)
   if(!token)  return res.status(UNAUTHORIZED).send()
 

@@ -55,9 +55,10 @@ export default class PostController {
 
   async save(req: Request, res: Response): Promise<Response<IPost>> {
     try {
-      const user = await this._postService.save(req.body.post)
-      return res.status(OK).send(user)
+      const post = await this._postService.save(req.body.post)
+      return res.status(OK).send(post)
     } catch (error) {
+      console.log(error)
       return res.status(BAD).send()
     }
   }
