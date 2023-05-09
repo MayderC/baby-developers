@@ -8,9 +8,6 @@ export default class BaseRepository<T> implements IRepository<T> {
   private _entity;
 
   constructor() {}
-  find(options: unknown): Promise<T[]> {
-    throw new Error("Method not implemented.");
-  }
 
   setEntity(entity: EntityTarget<T>) {
     this._entity = entity;
