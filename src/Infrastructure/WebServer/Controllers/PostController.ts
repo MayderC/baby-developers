@@ -20,7 +20,7 @@ export default class PostController {
       if(!post) return res.status(NOT_FOUND).send()
       return res.status(OK).send(post)
     } catch (error) {
-      return res.status(BAD).send(error)
+      return res.status(NOT_FOUND).send(error)
     }
   }
 

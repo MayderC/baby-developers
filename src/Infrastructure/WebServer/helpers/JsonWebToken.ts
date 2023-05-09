@@ -1,27 +1,26 @@
-import {sign, verify, decode, JwtPayload} from 'jsonwebtoken'
-import { IRefreshTokenPayload, ITokenPayload} from './ITokenPayload';
+import {decode, sign, verify} from 'jsonwebtoken'
+import {IRefreshTokenPayload, ITokenPayload} from './ITokenPayload';
 import Environments from '../../../Environments/index'
 
 const env = Environments
 
 export const createToken = (payload: ITokenPayload) : string => {
   const token = sign(payload, env.JWT_KEYWORD, {
-    expiresIn : 100
+    expiresIn : 60 * 10
   })
   return token;
 }
 
 export const createRefreshToken = ( payload: IRefreshTokenPayload) => {
-  const token = sign(payload, env.JWT_KEYWORD, {
-    expiresIn : 30 * 60000
-  })
-  return token;
+  return sign(payload, env.JWT_KEYWORD, {
+    expiresIn: 60 * 60
+  });
 }
 
 export const verifyToken = <T>(token: string) : boolean => {
   try {
     const payload = verify(token, env.JWT_KEYWORD) as T
-    return payload ? true : false
+    return !!payload
 
   } catch (error) {
     return false
