@@ -3,6 +3,7 @@ import { check, param } from "express-validator";
 import { validation } from "../Middlewares/validationResult";
 import PostController from './../Controllers/PostController';
 import { validateJWT } from './../Middlewares/JsonWebToken';
+import {getUser} from "../Middlewares/routes/auth/getUser";
 const router = Router()
 
 export default (postController: PostController) => {
@@ -14,7 +15,8 @@ export default (postController: PostController) => {
     check('post.body', 'the body is requerid').notEmpty(),
     check('post.description', 'the body is requerid').notEmpty(),
     validateJWT,
-    validation
+    validation,
+    getUser
   ], postController.save.bind(postController))
 
   router.delete('/:id',[
