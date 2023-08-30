@@ -31,6 +31,6 @@ export class User implements IUser {
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[]
 
-  @OneToMany(() => Post, (posts) => posts.user)
+  @OneToMany(() => Post, (posts) => posts.userId)
   posts: Post[]
 }

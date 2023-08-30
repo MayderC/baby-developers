@@ -1,6 +1,6 @@
 import {Request} from "express";
 import {ITokenPayload} from "../helpers/ITokenPayload";
 
-export interface ResquestHandler extends Request {
+export interface CustomResquestHandler extends Request {
     userLogged: ITokenPayload
 }

@@ -1,0 +1,7 @@
+export enum RoleEnum {
+  OWNER = "OWNER",
+  ADMIN = "ADMIN",
+  MOD = "MOD",
+  PROFILE_JUNIOR = "JUNIOR_PROFILE",
+  PFORILE_HHRR = "HHRR_PFORILE",
+}

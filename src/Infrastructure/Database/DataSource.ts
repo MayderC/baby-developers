@@ -21,10 +21,6 @@ export default new DataSource({
   password: env.DB_PASSWORD,
   database: env.DB_NAME,
   entities: [User, Role, Comment, Post, Company, Tags, PostTags],
-  extra: {
-    options: {
-      encrypt: false,
-    },
-  },
+
   synchronize: true,
 });

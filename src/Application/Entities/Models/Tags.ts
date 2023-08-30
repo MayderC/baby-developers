@@ -10,7 +10,7 @@ export class Tags implements ITagsPost {
   @Column()
   name: string;
 
-  @OneToMany(() => PostTags, (post) => post.posts)
+  @OneToMany(() => PostTags, (post) => post.tags)
   tagsPost: PostTags[];
 
   @Column()
